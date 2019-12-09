@@ -1,0 +1,61 @@
+###############################################################################
+#                          配置ssh 免密码登陆服务器                           # 
+###############################################################################
+
+1.Config you local machine
+
+$sudo apt-get install openssh-server
+$sudo service ssh start or $sudo /etc/init.d/ssh start
+$ssh-keygen -t rsa
+$ssh-copy-id user@ip_address (user: Remote sever username, ip_address: Remote
+        server ip address)
+2.Config the server ssh config
+
+Login the remote server
+
+$sudo vim /etc/ssh/sshd_config
+... ...
+LoginGraceTime 120
+PermitRootLogin without-password
+StrictModes yes
+... ...
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile  %h/.ssh/authorized_keys
+... ...
+
+$sudo service ssh restart or sudo /etc/init.d/ssh start
+
+3.Now you can login remote server with ssh user_name@ip_address.
+$ssh user_name@ip_address
+
+###############################################################################
+#                         配置远程主机别名                                    #　 
+# user config file: ~/.ssh/config                                             #
+# system config file: /etc/ssh/ssh_config                                     #
+###############################################################################
+
+$vim ~/.ssh/config
+... ...
+Host 别名
+HostName 主机名或者IP地址
+Port 端口号(default:22)
+User 用户名
+IdentifyFile 密钥文件路径
+IdentitiesOnly 只接受SSH key登录
+PreferredAuthentications 强制使用Public Key 验证
+... ...
+===============================================================================
+for example
+vim ~/.ssh/config
+... ...
+Host www
+HostName www.hi-linux.com
+Port 22
+User root
+IdentityFile  ~/.ssh/id_rsa
+IdentitiesOnly yes
+... ...
+$ssh www 
+Now, you login the www.hi-linux.com server.
+===============================================================================

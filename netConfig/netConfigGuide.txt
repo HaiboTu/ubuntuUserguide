@@ -1,0 +1,90 @@
+###############################################################################
+#                       Ubuntu静态路由配置指导                                #
+#                 可用于Ubuntu通过不同网卡访问不同网段地址                    #
+###############################################################################
+
+1.Delete the default gateway for devName0
+$sudo route del default gw xxx.xxx.xxx.xxx dev devName0
+
+2.Add the default gateway for the devName1
+$sudo route add default gw xx.xx.xx.xx dev devName1
+
+3.Add the special net address route for devName0
+$sudo route add -net 10.70.120.0/23 gw 10.70.120.254 dev devName0
+
+4.配置开机自启
+$sudo vim /etc/rc.local
+... ...
+
+# By default this script does nothing.
+
+#route add default gw 172.30.20.1 dev wlp5s0
+#route add -net 10.70.120.0/23 gw 10.70.120.254 dev enp1s0
+route add -net 10.70.20.0/23 gw 10.70.120.254 dev enp1s0
+
+exit 0
+... ...
+
+$sudo reboot
+
+##############################################################################
+#                       Config Ubuntu as router                              #
+#              将ubuntu主机作为路由器转发，让内网机器链接外网                #
+#                       Date: 2018.12.12                                     #
+#                       Author: Dennis Tu                                    #
+##############################################################################
+
+【Router Ubuntu】
+1.查看路由转发功能
+#cat /proc/sys/net/ipv4/ip_forward
+... ...
+1  #enable
+... ...
+0  #disable
+... ...
+
+#echo 1 > /proc/sys/net/ipv4/ip_forward
+
+2.永久打开
+#vim /etc/sysctl.conf
+... ...
+net.ipv4.ip_forward = 1
+... ...
+
+#sysctl -p
+
+2.添加NAT规则
+#iptables -t nat -A POSTROUTING -s xxx.xxx.xxx.xxx/24 -j SNAT --to XXX.XXX.XXX.XXX
+
+3.查看NAT配置
+#iptables -nL --line-number
+... ....
+Chain PREROUTING (policy ACCEPT)
+num  target     prot opt source               destination
+
+Chain INPUT (policy ACCEPT)
+num  target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+num  target     prot opt source               destination
+
+Chain POSTROUTING (policy ACCEPT)
+num  target     prot opt source               destination
+1    SNAT       all  --  10.70.120.0/24       0.0.0.0/0 to:172.30.20.124
+# The above item 1 is our nat config
+... ...
+
+【Pernal PC in lan】
+4.配置内网需要访问外网网管为刚配置Ubuntu Router
+
+#route add -net 10.70.20.0/23 gw 10.70.120.254 dev enp1s0
+
+5.功能测试
+#ping www.baidu.com
+... ...
+PING www.a.shifen.com (115.239.211.112) 56(84) bytes of data.
+64 bytes from ........
+... ...
+
+6.OK, Now you can access the internet through our Ubuntu router.
+

@@ -1,0 +1,22 @@
+###############################################################################
+#                          uefi shell 使用指南                                # 
+###############################################################################
+
+1. Enter to the disk
+#fs1 is the disk
+shell>fs1: 
+
+2. Enter the EFI boot directory
+shell>ls 
+... ...
+. .. EFI
+... ...
+shell>cd /EFI/ubuntu/boot
+shell>ls
+... ...
+shi***.efi
+... ...
+
+3. Boot the grub
+shell> shi***.efi
+

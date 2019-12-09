@@ -1,0 +1,81 @@
+###############################################################################
+#                      Ubuntu Grub参数配置指导                                #
+###############################################################################
+
+1.配置文件路径
+$ls /etc/default/grub
+/etc/default/grub
+
+
+2.修改参数
+$vim /etc/default/grub
+... ...
+
+GRUB_DEFAULT=0
+GRUB_HIDDEN_TIMEOUT=0
+GRUB_HIDDEN_TIMEOUT_QUIET=true
+GRUB_TIMEOUT=10
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_CMDLINE_LINUX=""
+
+... ...
+
+Notes:
+a.GRUB_DEFAULT
+默认的菜单选择项，值可以是数字，默认从0开始，值也可以是title后面的字符串，
+当值是‘saved’时有特殊含义：默认的菜单选则项会被保存在GRUB_SAVEDEFAULT中，
+下次启动时会从这个值启动。当值为saved是可以用grub-set-default和grub-reboot
+来设置默认启动项，grub-set-default直到下次修改前都有效，grub-reboot下次启动时生效
+
+b.GRUB_SAVEDEFAULT
+只有这个值是true，GRUB_DEFAULT是saved时才会起作用
+
+c.GRUB_TIMEOUT
+选择菜单的显示时间，默认是5，值是0表示不显示菜单选项，值是-1表示无限期的等待做出选择
+
+d.GRUB_HIDDEN_TIMEOUT
+grub2第一次执行时会寻找其他操作系统，如果没有检测到则会将菜单隐藏，
+如果有其他操作系统才会显示菜单，如果参数大于0，则会等待响应的秒数，但是不会显示菜单，
+可以按住shift显示菜单
+
+e.GRUB_DISTRIBUTOR
+菜单中的描述名称，采用命令lsb_release判断，应该是红帽系列的，如果不是就归为Debian
+
+f.GRUB_CMDLINE_LINUX
+此行将追加到所有的linux定义内核行的后面，不论是救援模式还是一般模式(如noalsr)
+
+g.GRUB_CMDLINE_LINUX_DEFAULT
+次选项只会追加在一般模式后面，同上
+
+h.GRUB_TERMINAL=console
+启用console，默认注释状态
+
+i.GRUB_DISABLE_LINUX_UUID=true
+在grub中指定root时可以使用UUID，默认注释
+
+j.GRUB_GFXMODE=640x480
+图形化菜单的分辨率，默认注释
+
+k.GRUB_DISABLE_LINUX_RECOVERY=true
+禁止显示救援模式
+
+3.生成实际配置
+$sudo update-grub or sudo update-grub2
+
+4.查看配置文件
+$sudo vim /boot/grub/grub.cfg
+... ...
+menuentry 'Ubuntu' --class ubuntu --class gnu-linux --class gnu --class os
+$menuentry_id_option 'gnulinux-simple-9cece4e8-8819-4cce-9b81-38992dda3c87' {
+... ...
+        linux	/vmlinuz-4.9.0-040900-lowlatency root=/dev/sdb6 ro xxx quiet splash $vt_handoff
+... ...
+}
+... ...
+Notes:
+a. xxx为配置参数(如noalsr)
+
+5.重启机器
+$sudo reboot
+

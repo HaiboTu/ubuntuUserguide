@@ -1,0 +1,41 @@
+###############################################################################
+#                          apt-get 指南                                       #
+###############################################################################
+
+1.安装软件包
+
+# package: 软件包名, 如 busybox
+# version: 软件版本，如 busybox=1:1.22.0-15ubuntu1
+# 如安装busybox 版本为1:1.22.0-15ubuntu1,对应命令为sudo apt-get install
+# busybox=1:1.22.0-15ubunt1u
+$sudo apt-get install package=version
+
+2.安装源码
+# 获取软件包名和版本
+$dpkg -l
+... ...
+||/ Name            Version             Architecture      Description
+ii  busybox-static  1:1.22.0-15ubuntu1  amd64             Standalone rescue ...
+... ...
+$apt-get source busybox-static=1:1.22.0-15ubuntu1
+... ...
+正在读取软件包列表... 完成
+... ...
+dpkg-source: info: applying static-sh-alias.patch
+... ...
+
+# 如果提示"E: 您必须在 sources.list 中指定代码源(deb-src) URI",
+# 则去掉sources.list 中deb-src注释符(#)
+$sudo vim /etc/apt/sources.list
+... ...
+#deb-src http://cn.archive.ubuntu.com/ubuntu/ xenial main restricted
+... ...
+------------------------------------------------------------------->
+... ...
+deb-src http://cn.archive.ubuntu.com/ubuntu/ xenial main restricted
+... ...
+
+#更新apt配置
+$apt update
+
+

@@ -1,0 +1,129 @@
+###############################################################################
+#                          Linux(rpm) Samba服务器配置                         #
+###############################################################################
+
+1.查看安装情况:
+# rpm -qa | grep samba
+2.使用命令:
+# mount  /dev/cdrom1  /mnt/cdrom1
+
+通过mount把cdrom1挂载到系统临时目录/mnt/cdrom1，在Packets包下面使用命令:
+
+# rpm -ivh samba.*.rpm包安装。
+切换到放置rpm文件的目录 
+
+[root@smb_server  root]# rpm -ivh samba-common-3.6.9-151.el6.x86_64
+//这是Samba 必备的程序，必须安装 
+
+[root@smb_server  root]# rpm  -ivh samba-3.6.9-151.el6.x86_64
+
+安装Samba 服务器程序，可以使我Windows 主机访问Samba 服务器共享的资源。 
+如果需要使Linux 主机访问Windows 主机上的共享资源，则还应该安装Samba 客户端程序。 
+[root@smb_server  root]# rpm  -ivh samba-client-3.6.9-151.el6.x86_64
+
+3.安装samba的rpm包完成后
+
+samba-common-3.6.9-151.el6.x86_64
+//主要提供samba服务器的设置文件与设置文件语法检验程序testparm
+
+samba-client-3.6.9-151.el6.x86_64
+//客户端软件，主要提供linux主机作为客户端时，所需要的工具指令集
+
+samba-swat-3.6.9-151.el6.x86_64
+//基于https协议的samba服务器web配置界面
+
+samba-3.6.9-151.el6.x86_64
+//服务器端软件，主要提供samba服务器的守护程序，共享文档，日志的轮替，开机默认选项
+
+Samba服务器安装完毕，会生成配置文件目录/etc/samba和其它一些samba可执行命令工具，/etc/samba/smb.conf是samba的核心配置文件，/etc/init.d/smb是samba的启动/关闭文件。
+
+4.查看samba的服务启动情况
+
+# service smb status
+5.设置开机自启动
+# chkconfig --level 35 smb on             //在3、5级别上自动运行samba服
+
+6.配置smb服务
+
+[global]
+workgroup = WORKGROUP
+server string = Samba Server Version %v
+netbios name = ImgPath05
+
+[ImgPath]
+comment = Public stuff
+path = /usr/local/nginx/html/img
+public = yes
+writeable = yes
+browseable = yes
+guest ok = yes
+
+共享目录为：/usr/local/nginx/html/img，共享目录对外名称为：ImgPath
+即在Windows看到的目录名称。
+
+设置共享目录权限：
+# chown -R nobody:nobody /usr/local/nginx/html/img/
+
+8. 启动或者重启smb服务
+
+重启smb服务
+# /etc/init.d/samba restart
+......
+# /etc/init.d/nmb restart
+测试smb.conf配置是否正确
+#testparm
+
+9. Windows访问共享目录，但是没有写权限，通过以下方式修改防火墙设置。
+将Linux smb服务添加到防火墙的例外中
+以root用户执行setup命令#setup弹出...重启生效,如果不想重启,用命令
+#setenforce 0
+
+###############################################################################
+#                          Linux(sudo-apt) Samba服务器配置                         #
+###############################################################################
+1.安装Samba
+$sudo apt-get install samba
+
+2.创建用户
+$sudo adduser xxx(xxx 为用户名)
+
+3.samba服务添加用户
+$sudo smbpasswd -a xxx(xxx为步骤2创建用户名)
+
+4.创建共享路径
+$mkdir sharePathDir(sharePathDir 为共享文件路径)
+
+5.修改共享文件owner
+$chown -R xxx:xxx sharePathDir/
+
+6.配置smb.conf
+[global]
+workgroup = WORKGROUP
+server string = Samba Server Version %v
+netbios name = ImgPath05
+
+[ImgPath]
+comment = Public stuff
+path = sharePathDir
+public = yes
+writeable = yes
+browseable = yes
+guest ok = yes
+
+7.启动Samba服务
+$sudo systemctl start smbd or sudo /etc/init.d/samba start
+
+8.要检查Samba服务
+$systemctl status smbd
+
+9.重启Samba
+$sudo /etc/init.d/smbd restart or sudo service smbd restart
+
+10.关闭samba服务
+$sudo /etc/init.d/samba stop
+
+11.Windows 端
+地址栏直接输入：\\IP(xxx.xxx.xxx.xxx)
+
+
+

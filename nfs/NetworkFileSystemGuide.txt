@@ -1,0 +1,46 @@
+###############################################################################
+#                       Network File System(NFS)使用指导                      #
+###############################################################################
+
+[ServerIP:xxx.xxx.xxx.xxx user:xxx passwd:xxx]
+
+1.安装NFS服务
+$ sudo apt-get install nfs-kernel-server
+
+2.查看NFS的端口是否打开
+$netstat -tl
+
+3.重启NFS服务器
+$sudo /etc/init.d/nfs-kernel-server restart
+
+4.创建nfs共享目录/home/share，在里面新建文件share.txt共享
+$mkdir share
+$touch share.txt
+$ls
+. .. share.txt
+
+5.修改nfs配置文件/etc/exports
+$sudo vim /etc/exports
+    ... ...
+/home/share *(rw,sync,no_root_squash,no_subtree_check)
+    ... ...
+
+    [Client]
+    1.挂载server共享文件
+    $mount ServerIP:/home/share /mount-point
+
+    2.查看服务器共享资源
+    $showmount [dehv] ServerIP
+    -d :显示客户端所挂载的共享目录
+    -e: 显示nfs服务的导出共享目录列表
+    -h: 显示帮助信息
+    -v: 显示版本
+
+    3.查看共享文件
+    $cd /mount-point
+    $ls
+    . .. share.txt
+
+    4.卸载共享资源
+    $umount /mount-point
+#注意：当有用户在使用某个已加装的共享目录上的文件时(在挂载点下要退出才能卸载)，则不能卸载在文件系统。如果用户确认无误，可使用"umount -f"命令强行卸载共享的目录。

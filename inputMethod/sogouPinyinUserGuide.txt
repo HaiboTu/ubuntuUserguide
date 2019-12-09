@@ -1,0 +1,34 @@
+###############################################################################
+#                         sogou 输入法安装指南                                #
+###############################################################################
+
+1.Install the fcitx
+
+$sudo apt-get install fcitx
+
+2.Downloads the sogou software package from the https://pinyin.sogou.com/linux/
+to the ~/Downloads directory
+
+$cd ~/Downloads
+$ls
+. .. sogoupinyin_2.2.0.0108_amd64.deb
+
+3.Install the sogoupin package
+$sudo dpkg -i sogoupinyin_2.2.0.0108_amd64.deb
+
+4.If install package failed, use the "apt-get install -f" cmd
+$sudo apt-get install -f
+... ...
+#Try again with install cmd "sudo dpkg -i sogoupinyin_xxx_amd64.deb"
+
+$sudo dpkg -i sogoupinyin_2.2.0.0108_amd64.deb
+
+5.reboot the system
+
+6.Now, you will see the sogou input method logo on the top right corner. You
+can also change the input method from the Fcitx configure interface.
+
+#sougou -> setting -> 高级 -> Fcitx配置 -> 打开Fcitx配置界面 -> + ->Pinyin
+
+change the input method with "ctrl + space"
+

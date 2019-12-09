@@ -1,0 +1,136 @@
+###############################################################################
+#                   Linux bootImage(UEFI) 制作指南                            #
+#                           作者： 涂海波                                     #
+#                           时间： 2018.08. 24                                #
+###############################################################################
+
+1.获取Linux Kernel源码
+
+# 创建kernel工程目录
+$mkdir linuxKernel
+
+# 进入kernel工程目录
+$cd linuxKernel
+
+# 通过公司gerrit服务器：
+$git clone ssh://tuhaibo@192.168.50.37:29418/kernel
+
+# 直接从Linux源码网站获取
+# Address: https://www.kernel.org/
+
+2.编译bzImage
+
+# 进入kernel工程目录(./kernel)
+$make bzImage -j16
+
+3.制作启动磁盘文件
+
+#创建磁盘文件
+#image_name: 需要制作的磁盘文件名称
+$dd if=/dev/zero of=image_name bs=1M count=100 
+
+#清除磁盘
+$sudo sgdisk -og image_name
+
+#创建分区
+#创建EFI System GPT分区
+$sudo sgdisk -n 1:0:5M -c 1:"EFI System Partition" -t 1:ef00 image_name
+
+#创建System GPT分区
+$sudo sgdisk -n 2:8M:48M -c 2:"Data System Partion" -t 2:ef01 image_name
+
+#创建DATA GPT分区
+$sudo sgdisk -n 3:56M:96M -c 3:"Test Data Partion" -t 3:ef02 image_name
+
+#格式化分区
+#虚拟磁盘文件为块设备
+$sudo losetup --show -P -f image_name
+
+... ...
+
+loopX #其中X为1,2 ...，根据当前系统状态而定
+
+... ...
+
+#格式化EFI System分区为vfat格式
+$sudo mkfs.vfat /dev/loopXp1
+
+#格式化System系统分区为ext2格式
+$sudo mkfs.ext2 /dev/loopXp2
+
+#格式化Data分区为ext3格式
+$sudo mkfs.ext2 ${LOOP_DEV}p3
+
+4.挂载分区
+
+#进入linuxKernel工作目录
+cd ..
+
+#创建EFI System分区挂载目录
+$mkdir eFISystemMount
+
+#挂载EFI System分区
+$sudo mount /dev/loopXp1 ./eFISystemMount
+
+#创建System分区挂载目录
+$mkdir SystemMount
+
+#挂载System分区
+$sudo mount /dev/loopXp2 ./systemMount
+
+#创建DATA分区挂载目录
+$mkdir dataSystemMount
+
+#挂载EFI System分区
+$sudo mount /dev/loopXp3 ./dataSystemMount
+
+5.拷贝grub UEFI启动文件
+
+#拷贝UEFI引导文件到EFI system分区
+#该指导以ubuntu 4.13.0-45-generic为例，默认UEFI文件为/boot/efi目录
+$sudo cp /boot/efi/* ./eFISystemMount
+
+6.拷贝System文件
+
+#创建grub文件夹
+$sudo mkdir ./systemMount/grub
+
+#拷贝grub 启动配置
+#该指导以ubuntu 4.13.0-45-generic为例，默认UEFI文件为/boot/efi目录
+$sudo cp /boot/grub/ ./systemMount/grub
+
+#拷贝bzImage/ramfs
+#bzImage 为编译kernel生成，路径:./linuxKernel/kernel/arch/x86/boot
+#ramfs 为自己制作的ramfs，也可直接利用ubuntu自带，
+#该指导以ubuntu 4.13.0-45-generic为例，默认ramfs路径：
+#/boot/initrd.img-4.13.0-45-generic
+
+#创建os启动目录
+$sudo mkdir ./systemMount/os
+
+$sudo cp ./kernel/arch/x86/bzImage ./systemMount/os
+$sudo cp /boot/initrd.img-4.13.0-45-generic ./systemMount/os
+
+6.拷贝data数据
+#XXX:自己想要的数据文件
+$sudo cp XXX ./dataSystemMount
+
+7.同步磁盘文件
+$sync
+
+8.制作启动u盘
+#sdx:需要制作的u盘设备文件
+$sudo dd if=./image_name of=/dev/sdx 
+
+9.umount已挂载分区
+$sudo umount ./eFISystemMount 
+$sudo umount ./systemMount 
+$sudo umount ./dataSystemMount 
+
+10.去虚拟化磁盘文件
+$sudo losetup -d /dev/loopX
+
+11.启动
+#将制作好的U盘插入电脑，选择bios设置为uefi引导，启动.
+#如果启动遇到困难，检查磁盘grub配置是否有问题, 修改grub 启动uuid
+

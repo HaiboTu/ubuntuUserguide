@@ -1,0 +1,26 @@
+###############################################################################
+#                             Linux Kernel更新                                #
+###############################################################################
+
+1. 查看当前kernel版本
+$ uname -sr
+...
+4.15.0-38-generic
+...
+2. 选择要升级内核
+
+到网站（http://kernel.ubuntu.com/~kernel-ppa/mainline/)查找要升级内核版本包
+
+3. 下载
+
+$ wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.10.1/linux-headers-4.10.1-041001_4.10.1-041001.201702260735_all.deb
+$ wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.10.1/linux-headers-4.10.1-041001-generic_4.10.1-041001.201702260735_amd64.deb
+$ wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.10.1/linux-image-4.10.1-041001-generic_4.10.1-041001.201702260735_amd64.deb
+
+4. 安装
+$ sudo dpkg -i *.deb
+
+5. 重启确认
+$uname -sr
+
+

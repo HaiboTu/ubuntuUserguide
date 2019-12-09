@@ -1,0 +1,86 @@
+###############################################################################
+#                       Qemu 使用指南                                         #
+#                       作者：涂海波                                          #
+#                       公司：致象尔微                                        #
+#                       时间：2017.10.26                                      #
+###############################################################################
+1.下载qemu源码
+$git clone ssh://tuhaibo@192.168.50.37:29418/qemu
+
+2.本地切换到sev-devel分支
+$git checkout -b sev-devel origin/amd
+
+3.编译Qemu
+$./configure --target-list=x86_64-softmmu --prefix=/usr/local/
+ERROR: glib-2.22 gthread-2.0 is required to compile QEMU
+
+4.安装libglib2.0-dev
+$sudo apt-get install libglib2.0-dev
+正在读取软件包列表... 完成
+... ...
+正在处理用于 libc-bin (2.23-0ubuntu9) 的触发器 ...
+
+5.安装libtool
+$sudo apt-get install libtool
+正在读取软件包列表... 完成
+... ...
+正在设置 libtool (2.4.6-0.1) ...
+
+6.git 模块更新
+$git submodule update --init pixman
+Submodule 'pixman' (git://anongit.freedesktop.org/pixman) registered for path
+'pixman'
+... ...
+Submodule path 'pixman': checked out '87eea99e443b389c978cf37efc52788bf03a0ee0'
+
+$git submodule update --init dtc
+Submodule 'dtc' (git://git.qemu-project.org/dtc.git) registered for path 'dtc'
+... ...
+Submodule path 'dtc': checked out '558cd81bdd432769b59bff01240c44f82cfb1a9d'
+
+7.配置编译信息
+$./configure --target-list=x86_64-softmmu --prefix=/usr/local
+Install prefix    /usr/local/
+... ...
+VxHS block device no
+
+8.配置pixman
+$cd /home/haibotu/TangramProject/qemu/pixman
+$autoreconf -v --install
+#如果没安装autoreconf，使用sudo apt install autoreconf安装
+
+9.编译qemu
+$cd /home/haibotu/TangramProject/qemu/
+$make
+
+10.Qemu运行Kernel
+$sudo qemu-system-x86_64 -m 1024M -kernel /boot/vmlinuz-4.10.0-40-generic -initrd
+/boot/initrd.img-4.10.0-40-generic -enable-kvm -m 1024M -append "root=/dev/ram
+console=ttyS0,115200n8 console=tty1" -nographic
+#-kernel: bzImage
+#-initrd: ramfs
+#-m: memory size
+#-append: parameter to the Linux kernel
+#-nographic: no graphic config
+
+11.Qemu-nbd加载qcow2镜像文件
+#加载nbd驱动
+$sudo modprobe nbd max_part=8
+
+$modinfo nbd
+
+#连接 qemu-nbd
+$sudo qemu-nbd -c /dev/nbd0 centos.qcow2
+
+#查看分区
+$sudo fdisk -l /dev/nbd0
+
+#挂在分区
+$ sudo mount /dev/nbd0p1 /mnt/test1
+
+#去连接
+$ sudo qemu-nbd -d /dev/nbd0p1
+
+12.Qemu boot ubuntu iso
+$sudo qemu-system-x86_64 -hda ubuntu-amd64-1-vcpu.raw --cdrom ubuntu-16.04.5-desktop-amd64.iso --enable-kvm -m 2048M
+

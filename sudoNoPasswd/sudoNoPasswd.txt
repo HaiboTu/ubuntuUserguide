@@ -1,0 +1,23 @@
+###############################################################################
+#                                                                             #
+#                    config the sudo config for user                          #
+#                           Author: Denis Tu                                  #
+#                           Date: 2018.01.19                                  #
+###############################################################################
+
+1.Add user to sudo groups
+$sudo vim /etc/sudoers
+
+... ...
+root ALL=(ALL) ALL
+your_user_name ALL=(ALL) NOPASSWD:ALL 
+... ...
+
+2.Config users sudo NOPASSWD
+$sudo vim /etc/sudoers
+
+%admin ALL=(ALL) NOPASSWD:ALL
+... ...
+%sudo   ALL=(ALL) NOPASSWD:ALL
+... ...
+

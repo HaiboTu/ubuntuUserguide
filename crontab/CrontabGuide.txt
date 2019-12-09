@@ -1,0 +1,33 @@
+###############################################################################
+#                          配置contab 定时执行任务                            #
+###############################################################################
+crontab 默认使用邮件服务器输出异常日志，为了便于问题定位，需要配置邮件服务器
+
+1.安装postfix邮件服务器
+$ sudo apt-get install postfix
+#注意：安装过程中需要选择配置，通过tab键可以对配置功能选择。
+
+2.重启postfix邮件服务器
+$sudo service postfix restart
+
+3.配置crontab配置列表
+$ vim ~/crontab.txt
+... ...
+0 0 * * * /home/haibotu/TangramProject/UpdateTag.sh
+#每天凌晨0点0分，执行UpdateTag.sh shell脚本
+... ...
+
+4.添加crontab执行命令
+$crontab ~/crontab.txt
+
+5.查看crontab配置
+$crontab -l
+... ...
+0 0 * * * /home/haibotu/TangramProject/UpdateTag.sh
+... ...
+
+6.异常诊断
+$vim /var/mail/xxx
+#根据异常日志进行修改定位，然后重新启用crontab.txt配置
+
+
