@@ -44,7 +44,7 @@ e.GRUB_DISTRIBUTOR
 菜单中的描述名称，采用命令lsb_release判断，应该是红帽系列的，如果不是就归为Debian
 
 f.GRUB_CMDLINE_LINUX
-此行将追加到所有的linux定义内核行的后面，不论是救援模式还是一般模式(如nokalsr)
+此行将追加到所有的linux定义内核行的后面，不论是救援模式还是一般模式(如nokaslr)
 
 g.GRUB_CMDLINE_LINUX_DEFAULT
 次选项只会追加在一般模式后面，同上
@@ -75,7 +75,7 @@ $menuentry_id_option 'gnulinux-simple-9cece4e8-8819-4cce-9b81-38992dda3c87' {
 }
 ... ...
 Notes:
-a. xxx为配置参数(如nokalsr)
+a. xxx为配置参数(如nokaslr)
 
 5.重启机器
 $sudo reboot
