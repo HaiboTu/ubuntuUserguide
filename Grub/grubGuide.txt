@@ -23,10 +23,11 @@ GRUB_CMDLINE_LINUX=""
 
 Notes:
 a.GRUB_DEFAULT
-默认的菜单选择项，值可以是数字，默认从0开始，值也可以是title后面的字符串，
+- 默认的菜单选择项，值可以是数字，默认从0开始，值也可以是title后面的字符串，
 当值是‘saved’时有特殊含义：默认的菜单选则项会被保存在GRUB_SAVEDEFAULT中，
 下次启动时会从这个值启动。当值为saved是可以用grub-set-default和grub-reboot
 来设置默认启动项，grub-set-default直到下次修改前都有效，grub-reboot下次启动时生效
+- 如果要进入子菜单，如进入3.13.0-24-generic’ 可以设置GRUB_DEFAULT=“0>2”
 
 b.GRUB_SAVEDEFAULT
 只有这个值是true，GRUB_DEFAULT是saved时才会起作用
@@ -43,7 +44,7 @@ e.GRUB_DISTRIBUTOR
 菜单中的描述名称，采用命令lsb_release判断，应该是红帽系列的，如果不是就归为Debian
 
 f.GRUB_CMDLINE_LINUX
-此行将追加到所有的linux定义内核行的后面，不论是救援模式还是一般模式(如noalsr)
+此行将追加到所有的linux定义内核行的后面，不论是救援模式还是一般模式(如nokalsr)
 
 g.GRUB_CMDLINE_LINUX_DEFAULT
 次选项只会追加在一般模式后面，同上
@@ -74,7 +75,7 @@ $menuentry_id_option 'gnulinux-simple-9cece4e8-8819-4cce-9b81-38992dda3c87' {
 }
 ... ...
 Notes:
-a. xxx为配置参数(如noalsr)
+a. xxx为配置参数(如nokalsr)
 
 5.重启机器
 $sudo reboot
