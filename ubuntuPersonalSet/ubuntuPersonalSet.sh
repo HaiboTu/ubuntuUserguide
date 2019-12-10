@@ -3,16 +3,16 @@
 #Install the cscope software
 function installSoftware()
 {
-    sudo apt-get install cscope
-    sudo apt-get install ctags
-    sudo apt-get install git
-    sudo apt-get install vim
-    sudo apt-get install ssh
-    sudo apt-get install python-autopep8
-    sudo apt-get install clang-format
-    sudo apt-get install golang-1.9
-    sudo apt-get install golang-go
-    sudo apt-get install fcitx
+    sudo apt-get install -y cscope
+    sudo apt-get install -y ctags
+    sudo apt-get install -y git
+    sudo apt-get install -y vim
+    sudo apt-get install -y ssh
+    sudo apt-get install -y python-autopep8
+    sudo apt-get install -y clang-format
+    sudo apt-get install -y golang-1.9
+    sudo apt-get install -y golang-go
+    sudo apt-get install -y fcitx
     #go get -u mvdan.cc/sh/cmd/shfmt
 }
 
