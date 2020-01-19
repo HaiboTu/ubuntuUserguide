@@ -40,25 +40,28 @@ grub2第一次执行时会寻找其他操作系统，如果没有检测到则会
 如果有其他操作系统才会显示菜单，如果参数大于0，则会等待响应的秒数，但是不会显示菜单，
 可以按住shift显示菜单
 
-e.GRUB_DISTRIBUTOR
+e.GRUB_HIDDEN_TIMEOUT_QUIET=true
+隐藏启动选项，如果想在grub启动阶段显示grub启动配置菜单，可将该项设置为false
+
+f.GRUB_DISTRIBUTOR
 菜单中的描述名称，采用命令lsb_release判断，应该是红帽系列的，如果不是就归为Debian
 
-f.GRUB_CMDLINE_LINUX
+g.GRUB_CMDLINE_LINUX
 此行将追加到所有的linux定义内核行的后面，不论是救援模式还是一般模式(如nokaslr)
 
-g.GRUB_CMDLINE_LINUX_DEFAULT
+h.GRUB_CMDLINE_LINUX_DEFAULT
 次选项只会追加在一般模式后面，同上
 
-h.GRUB_TERMINAL=console
+i.GRUB_TERMINAL=console
 启用console，默认注释状态
 
-i.GRUB_DISABLE_LINUX_UUID=true
+j.GRUB_DISABLE_LINUX_UUID=true
 在grub中指定root时可以使用UUID，默认注释
 
-j.GRUB_GFXMODE=640x480
+k.GRUB_GFXMODE=640x480
 图形化菜单的分辨率，默认注释
 
-k.GRUB_DISABLE_LINUX_RECOVERY=true
+l.GRUB_DISABLE_LINUX_RECOVERY=true
 禁止显示救援模式
 
 3.生成实际配置
@@ -79,4 +82,8 @@ a. xxx为配置参数(如nokaslr)
 
 5.重启机器
 $sudo reboot
+
+Notes:
+a.在系统启动阶段按F2/F12(dell，其他厂商可能不同), 进入bios配置
+b.在进入grub之后，手动进入grub配置，按ESC键可以退出grub自动配置引导，进入手动配置
 
