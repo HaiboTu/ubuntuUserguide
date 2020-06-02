@@ -54,6 +54,9 @@ set csverb
 set tags=~/.vim/tags/tags
 " cscope and ctags config --->"
 
+" <--- ctags key map config"
+nmap <C-]> :ts <C-R>=expand("<cword>") <CR><CR>
+
 " <--- Auto pair complete begin"
 "function! ClosePair(char)
 "    if getline('.')[col('.') - 1] == a:char
@@ -117,6 +120,15 @@ Plugin 'https://github.com/jiangmiao/auto-pairs.git'
 "autoformat
 Plugin 'Chiel92/vim-autoformat'
 
+" The vim-gocode  plug"
+"Plugin 'https://github.com/Blackrush/vim-gocode'
+
+" The vim-go plug"
+"Plugin 'https://github.com/fatih/vim-go'
+
+" The godef plug""
+Plugin 'https://github.com/dgryski/vim-godef'
+
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
@@ -164,4 +176,5 @@ iab xt <c-r>=strftime("%y-%m-%d")<cr>
 
 nmap gl 080l
 
+let g:go_version_warning = 0
 

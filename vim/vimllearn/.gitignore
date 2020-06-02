@@ -1,0 +1,12 @@
+*.pyc
+*.swp
+tags
+*.o
+*.out
+*.log
+*.cgi
+core.*
+Session.vim
+Sessionx.vim
+*.tgz
+*.tar.gz
