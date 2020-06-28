@@ -7,5 +7,9 @@
 " The godef plug""
 Plugin 'https://github.com/dgryski/vim-godef'
 
-Note: 需要独立安装godef包;
+Note:
+a.需要独立安装godef包
+b.如果godef无法通过go安装，可以直接将其他系统godef可执行文件复制到/usr/bin使用
 
+2. go环境变量设置
+$go env -w GOPROXY=https://goproxy.io,direct
