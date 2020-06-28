@@ -23,3 +23,16 @@ Note: 希望输入的字符不被替换时，只需要在缩写后面输入Ctrl+
 5.清除所有缩写：
 :abclear
 
+6.go支持
+$vim xxx
+... ...
+... ...
+
+:echo $VIMRUNTIME
+/usr/share/vim/vim74
+
+$sudo vim $VIMRUNTIME/filetype
+... ...
+" Go (Google)
+au BufNewFile,BufRead *.go          setf go
+... ...

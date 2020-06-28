@@ -56,11 +56,14 @@ function update_tag {
 
     find ${SOURCE_DIR} -type f -name "*.c" -o -type f -name "*.cxx" -o -type f -name \
         "*.cpp" -o -type f -name "*.h" -o -type f -name "*.s" -o -type f \
-        -name "*.S"> ${FILE_LIST}
+        -name "*.S" -o -type f -name "*.go"> ${FILE_LIST}
 
     cscope -bkqi ${FILE_LIST} -f${CSCOPE_OUT} > /dev/null 2>&1
 
     ctags -L ${FILE_LIST} -f${CTAGS_OUT} > /dev/null 2>&1
+
+    #support for go
+    #gotags -L ${FILE_LIST} -f${CTAGS_OUT} > /dev/null 2>&1
 
     return 0;
 }

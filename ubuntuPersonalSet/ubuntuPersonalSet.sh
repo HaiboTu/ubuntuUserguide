@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #Install the cscope software
+#Replace apt-get with yum on centos
 function installSoftware()
 {
     sudo apt-get install -y cscope

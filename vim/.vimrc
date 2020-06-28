@@ -44,6 +44,9 @@ nmap <C-y>c :cs find c <C-R>=expand("<cword>") <CR><CR>
 nmap <C-y>f :cs find f <C-R>=expand("<cword>") <CR><CR>
 " cscope key map config --->"
 
+" <--- ctags key map config"
+nmap <C-]> :ts <C-R>=expand("<cword>") <CR><CR>
+
 " <--- cscope and ctags config"
 "path is the code didrectory
 "
@@ -178,3 +181,5 @@ nmap gl 080l
 
 let g:go_version_warning = 0
 
+" disable godef split feature
+let g:godef_split = 0
