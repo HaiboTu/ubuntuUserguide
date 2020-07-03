@@ -1,0 +1,101 @@
+###############################################################################
+#				   		yum 配置与使用(censtOS)							      #
+###############################################################################
+
+1.YUM的简介
+Yum（全称为 Yellow dog Updater, Modified）是一个rpm包管理器。它能够从指定的服务
+器上自动下载RPM包并安装，可以自动处理包之间的依赖性关系，并且一次性安装所有依赖
+的软件包，无须繁琐地一次次下载、安装。
+
+2.YUM的分类
+YUM服务端：服务端存放着各种rpm软件包，也称之为yum仓库或yum源。yum仓库分为网络yum
+仓库和本地yum仓库。若为网络yum仓库则需连网才能使用yum命令安装软件，若为本地yum仓
+库无需联网便可安装软件。
+
+YUM客户端：客户端只需完成简单的配置，便可使用yum命令安装软件。yum配置文件包括两种：
+全局配置文件和仓库配置文件。
+
+3.YUM客户端配置文件
+
+$vim /etc/yum.conf
+
+cachedir：软件包缓存目录
+keepcache：缓存是否保存，1保存0不保存
+debuglevel：调试级别（默认为2）
+logfile：日志文件路径
+gpgcheck：是否检查密钥，一种检验软件完整性的方式
+
+[root@localhost yum.repos.d]# cat /etc/yum.conf
+[main]
+cachedir=/var/cache/yum/$basearch/$releasever
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+exactarch=1
+obsoletes=1
+gpgcheck=1
+plugins=1
+installonly_limit=5
+
+仓库配置文件：/etc/yum.repos.d目录下存放着描述各yum仓库基本信息的文件
+一般，只要我们的网络连通，上面的yum源都是合法的yum源。通常在有网的情况下，会默认从
+"Base"yum源中下载我们需要的rpm包以及各种依赖包进行自动安装，在没有网络的情况下，则
+会选择"Media"yum源——本地光盘yum源。
+
+3.1.新建仓库配置文件
+/etc/yum.repos.d/目录下系统提供的仓库配置文件都指向官方yum仓库，但是从官方仓库下载
+软件包比较慢，因此我们需要新建指向非官方仓库的配置文件，并替换原来的CentOS-Base.repo
+文件。通常先将原来的官方仓库配置文件CentOS-Base.repo备份为CentOS-Base.repo.bak,
+再进行替换。
+
+法一：手动添加仓库配置文件，例如：vim locate.repo
+
+[repo id] 　　 仓库id，一定要放在[]里（必须要，一般第一个我们默认写成base）
+repo name 　　 仓库名，可以不要
+mirrorlist 　　镜像站点，可以不要
+baseurl		   yum仓库地址。例如：https://mirrors.aliyun.com/centos/6.9/os/x86_64/
+enabled        如果enabled=1或者不写，此容器都是生效的，enabled=0容器无效（默认是1）
+gpgcheck 　　　如果是1 则RPM数字证书生效，如果是0不生效
+gpgkey 　　    数字证书的公钥文件保存位置，不用管
+enablegroups={1|0} 开启组
+failovermethod={roundrobin|priority}
+roundrobin：   意为随机挑选，默认值
+priority:      按顺序访问
+cost=		   默认为1000
+
+法二：直接下载仓库配置文件
+
+http://mirrors.aliyun.com/repo/
+
+通过wget http://mirrors.aliyun.com/repo/Centos-6.repo命令下载与系统版本对应的仓库配置文件，
+并替换原来的CentOS-Base.repo文件。
+$wget http://mirrors.aliyun.com/repo/Centos-6.repo
+$mv CentOS-Base.repo CentOS-Base.repo.bak
+$mv Centos-6.repo CentOS-Base.repo
+
+4.常用的YUM命令
+
+ 4.1.仓库相关命令
+
+  1.启用与禁用仓库
+  启用仓库:yum-config-manager --enable "repo id"
+  禁用仓库:yum-config-manager --disable "repo id "
+
+  2.显示仓库列表
+  yum repolist
+
+  3.显示仓库中所有的软件列表
+  yum list
+
+  4.2.软件的安装卸载与更新
+  安装：yum -y install package1 加上参数y后，所有的依赖均自动安装
+  重新安装：yum reinstall package
+  卸载：yum remove package
+  更新：yum update package
+  降级：yum downgrage package
+  检查可用的更新：yum check-update
+  查询软件包的依赖：yum deplist package1
+
+ 4.3.缓存命令
+  清除缓存：yum clean all
+  构建缓存：yum makecache
