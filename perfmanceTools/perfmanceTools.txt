@@ -1,0 +1,35 @@
+1.SAR
+sysstat是Linux系统中的常用工具包。它的主要用途是观察服务负载，比如CPU和内存的占用率、
+网络的使用率以及磁盘写入和读取速度等。
+
+$sar -n DEV 1
+
+2.top
+$top
+
+3.htop
+$htop
+
+4.watch
+$watch -d cat /proc/softirqs
+
+5.numastat
+$numastat
+
+6.numactl
+$numactl --hard
+
+7.softirqs
+$cat /proc/softirqs | awk '{print $1, $2, $3}'
+
+8.mpstat
+$mpstat -P 2 1
+
+9.interrupts
+$cat /proc/interrupts
+
+10.绑核
+$taskset -cp 1 25718 #cpuid, pid
+
+$numactl --cpubind=0 --membind=0 python param
+
