@@ -13,6 +13,9 @@ set hlsearch
 set number
 set cindent
 
+" <--- add support for 中文
+set fencs=utf-8,GB18030,ucs-bom,default,latin1
+
 let python_highlight_all=1
 syntax on
 
