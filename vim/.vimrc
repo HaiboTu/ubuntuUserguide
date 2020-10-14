@@ -130,7 +130,7 @@ Plugin 'Chiel92/vim-autoformat'
 "Plugin 'https://github.com/Blackrush/vim-gocode'
 
 " The vim-go plug"
-"Plugin 'https://github.com/fatih/vim-go'
+Plugin 'https://github.com/fatih/vim-go'
 
 " The godef plug""
 Plugin 'https://github.com/dgryski/vim-godef'

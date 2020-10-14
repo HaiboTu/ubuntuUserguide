@@ -65,7 +65,12 @@ l.GRUB_DISABLE_LINUX_RECOVERY=true
 禁止显示救援模式
 
 3.生成实际配置
+
+Ubuntu
 $sudo update-grub or sudo update-grub2
+
+CentOS-7
+$sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 4.查看配置文件
 $sudo vim /boot/grub/grub.cfg
