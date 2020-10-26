@@ -25,8 +25,9 @@ Notes:
 a.GRUB_DEFAULT
 - 默认的菜单选择项，值可以是数字，默认从0开始，值也可以是title后面的字符串，
 当值是‘saved’时有特殊含义：默认的菜单选则项会被保存在GRUB_SAVEDEFAULT中，
-下次启动时会从这个值启动。当值为saved是可以用grub-set-default和grub-reboot
-来设置默认启动项，grub-set-default直到下次修改前都有效，grub-reboot下次启动时生效
+下次启动时会从这个值启动。当值为saved是可以用grub-set-default/grub2-set-default和grub-reboot
+来设置默认启动项，grub-set-default/grub2-set-default直到下次修改前都有效，grub-reboot下次启动时生效
+- grub的menuentry编码从0开始编码
 - 如果要进入子菜单，如进入3.13.0-24-generic’ 可以设置GRUB_DEFAULT=“0>2”
 
 b.GRUB_SAVEDEFAULT
