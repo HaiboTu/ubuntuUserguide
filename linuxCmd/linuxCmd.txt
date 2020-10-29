@@ -11,3 +11,13 @@ Release:    16.04
 Codename:   xenial
 ... ...
 
+2.find . -path "./nginx" -prune -o -print
+
+###########################################
+if -patch "./nginx"
+	-prune
+else
+	-print
+endif
+###########################################
+
