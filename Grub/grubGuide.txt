@@ -29,6 +29,12 @@ a.GRUB_DEFAULT
 来设置默认启动项，grub-set-default/grub2-set-default直到下次修改前都有效，grub-reboot下次启动时生效
 - grub的menuentry编码从0开始编码
 - 如果要进入子菜单，如进入3.13.0-24-generic’ 可以设置GRUB_DEFAULT=“0>2”
+- 可以使用grub2-editenv list查看当前grub2启动设置
+
+$sudo  grub2-editenv list
+... ...
+saved_entry=0
+... ..
 
 b.GRUB_SAVEDEFAULT
 只有这个值是true，GRUB_DEFAULT是saved时才会起作用
