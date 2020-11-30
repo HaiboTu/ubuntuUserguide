@@ -15,3 +15,15 @@ $git config --global commit.template "xxx"
 $git config --global push.default simple
 
 Address:https://git.oschina.net/progit/
+
+2. Git tag command
+
+#create tag v2.3
+$git tag -a v2.3 -m "version 2.3(merge npt patches) released for ant financial services group"
+
+#push tag to server
+$git push origin v2.3
+
+#show the local tag
+$git show v2.3
+

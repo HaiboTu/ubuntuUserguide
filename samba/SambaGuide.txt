@@ -79,15 +79,16 @@ guest ok = yes
 #setenforce 0
 
 ###############################################################################
-#                          Linux(sudo-apt) Samba服务器配置                         #
+#                          Linux(sudo-apt) Samba服务器配置                    #
 ###############################################################################
 1.安装Samba
-$sudo apt-get install samba
+$sudo apt-get install samba #ubuntu
 
 2.创建用户
 $sudo adduser xxx(xxx 为用户名)
 
 3.samba服务添加用户
+#如果提示用户名和密码不对，排查该选项
 $sudo smbpasswd -a xxx(xxx为步骤2创建用户名)
 
 4.创建共享路径
@@ -97,6 +98,7 @@ $mkdir sharePathDir(sharePathDir 为共享文件路径)
 $chown -R xxx:xxx sharePathDir/
 
 6.配置smb.conf
+$vim /etc/samba/smb.conf
 [global]
 workgroup = WORKGROUP
 server string = Samba Server Version %v
@@ -111,7 +113,7 @@ browseable = yes
 guest ok = yes
 
 7.启动Samba服务
-$sudo systemctl start smbd or sudo /etc/init.d/samba start
+$sudo systemctl start smbd
 
 8.要检查Samba服务
 $systemctl status smbd
@@ -125,5 +127,49 @@ $sudo /etc/init.d/samba stop
 11.Windows 端
 地址栏直接输入：\\IP(xxx.xxx.xxx.xxx)
 
+###############################################################################
+#                          Linux(centOS) Samba服务器配置                    #
+###############################################################################
+1.安装Samba
+$sudo install samba -y
 
+2.开启smb/nmb服务
+$sudo systemctl start smb nmb
+
+3.将smb/nmb添加到开机启动项
+$sudo systemctl enable smb nmb
+
+4.查看smb/nmb的监听端口是否打开
+$sudo netstat -anlpt |grep smb
+$sudo netstat -anlpu | grep nmb
+
+5.添加到防火墙白名单放行
+$sudo firewallcmd --permanent --add-service=samba
+
+6.关闭SeLinux
+$sudo setenforce 0
+
+7.建立测试目录和用户
+$mkdir /common
+$useradd zhangsan
+$smbpasswd -a zhangsan
+
+8.检测用户是否添加成功
+$pdbedit -L
+
+9.给测试目录755权限
+$chown -R 755 /common/
+
+10.测试语法是否正确
+$testparm
+
+11.重启smb/nmb服务
+systemctl restart smb nmb
+
+12.Linux访问samba服务共享文件
+方法一：使用指令smbclient -L //192.168.0.94 访问
+$smbclient -L //192.168.0.94
+
+方法二：通例Linux挂载访问samba服务器共享文件（类似windows 网络映射）
+$mount -t cifs //192.168.0.94/common /mnt -o username=zhangsan,password=123456
 
