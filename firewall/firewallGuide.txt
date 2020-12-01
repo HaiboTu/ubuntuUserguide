@@ -1,0 +1,45 @@
+###############################################################################
+#                          firewall 指南                                      #
+###############################################################################
+
+1.iptables和firewall冲突，禁用iptables
+#停止iptables服务
+$sudo systemctl stop iptables
+#禁用iptables服务
+$sudo systemctl mask iptables
+
+2.开启firewall服务
+#重启firewalld服务(注意有个d)
+$sudo systemctl restart firewalld
+#设置开机自启动(注意有个d)
+$sudo systemctl enable firewalld
+
+3.通用设置脚本
+#设置脚本
+$sudo firewall-cmd --permanent --zone=public --add-service=ftp
+$sudo firewall-cmd --permanent --zone=public --add-port=21/tcp
+$sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
+$sudo firewall-cmd --permanent --zone=public --add-port=8080/tcpfirewall-cmd --reload
+
+命令说明 :
+--permanent 永久生效 / 否则重启失效
+--zone 作用域 一般都是public , 可以使用firewall-cmd --list-all-zones命令查看当前使用的域
+--add-service 添加服务
+--add-port 添加端口, 格式为 端口号/端口协议
+
+4.查看端口开放情况
+#查看某个端口
+$sudo firewall-cmd --zone=public --query-port=80/tcp
+
+#查看所有端口开放情况
+$sudo firewall-cmd --zone=public --list-ports
+
+5.端口转发路由
+# 将80端口的流量转发至8080
+$firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080
+
+# 将80端口的流量转发至192.168.0.1
+$firewall-cmd --add-forward-port=proto=80:proto=tcp:toaddr=192.168.1.0.1
+
+# 将80端口的流量转发至192.168.0.1的8080端口
+$firewall-cmd --add-forward-port=proto=80:proto=tcp:toaddr=192.168.0.1:toport=8080
