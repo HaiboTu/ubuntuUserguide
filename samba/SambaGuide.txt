@@ -97,8 +97,11 @@ $mkdir sharePathDir(sharePathDir 为共享文件路径)
 5.修改共享文件owner
 $chown -R xxx:xxx sharePathDir/
 
+6.修改共享目录权限
+#chmod 777 sharePathDir(sharePathDir 为共享文件路径)
+
 6.配置smb.conf
-$vim /etc/samba/smb.conf
+$sudo vim /etc/samba/smb.conf
 [global]
 workgroup = WORKGROUP
 server string = Samba Server Version %v
@@ -128,7 +131,7 @@ $sudo /etc/init.d/samba stop
 地址栏直接输入：\\IP(xxx.xxx.xxx.xxx)
 
 ###############################################################################
-#                          Linux(centOS) Samba服务器配置                    #
+#                          Linux(centOS) Samba服务器配置                      #
 ###############################################################################
 1.安装Samba
 $sudo install samba -y
