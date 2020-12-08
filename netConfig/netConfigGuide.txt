@@ -11,6 +11,7 @@ $sudo route add default gw xx.xx.xx.xx dev devName1
 
 3.Add the special net address route for devName0
 $sudo route add -net 10.70.120.0/23 gw 10.70.120.254 dev devName0
+Notes:设置局域网内部网络发送网关
 
 4.配置开机自启
 $sudo vim /etc/rc.local
@@ -57,27 +58,28 @@ net.ipv4.ip_forward = 1
 #iptables -t nat -A POSTROUTING -s xxx.xxx.xxx.xxx/24 -j SNAT --to XXX.XXX.XXX.XXX
 
 3.查看NAT配置
-#iptables -nL --line-number
-... ....
+$sudo iptables -t nat -nL
+
 Chain PREROUTING (policy ACCEPT)
-num  target     prot opt source               destination
+target     prot opt source               destination
 
 Chain INPUT (policy ACCEPT)
-num  target     prot opt source               destination
+target     prot opt source               destination
 
 Chain OUTPUT (policy ACCEPT)
-num  target     prot opt source               destination
+target     prot opt source               destination
 
 Chain POSTROUTING (policy ACCEPT)
-num  target     prot opt source               destination
-1    SNAT       all  --  10.70.120.0/24       0.0.0.0/0 to:172.30.20.124
+target     prot opt source               destination
+SNAT       all  --  10.61.40.0/24        0.0.0.0/0		to:172.21.21.131
 # The above item 1 is our nat config
 ... ...
 
 【Pernal PC in lan】
-4.配置内网需要访问外网网管为刚配置Ubuntu Router
+4.配置内网需要访问外网网关为刚配置Ubuntu Router
 
-#route add -net 10.70.20.0/23 gw 10.70.120.254 dev enp1s0
+#route add -net 10.70.20.0/24 gw 10.70.120.254 dev enp1s0
+Notes:　gw为配置router在局域网中的ip
 
 5.功能测试
 #ping www.baidu.com
