@@ -24,6 +24,18 @@ $git tag -a v2.3 -m "version 2.3(merge npt patches) released for ant financial s
 #push tag to server
 $git push origin v2.3
 
+#delete the tag on the server
+$git push origin --delete tag <tagname>
+
 #show the local tag
 $git show v2.3
 
+#切换到某一版本(tag)
+$git checkout -b feature-bugfix-v1.3 v1.3
+
+#delete on tag
+$git tag -d v2.4
+
+3. Git clone
+#git clone指定分支
+$git clone -b branchA http://admin@192.168.1.101:7070/r/virtualbox_all_versions.git
