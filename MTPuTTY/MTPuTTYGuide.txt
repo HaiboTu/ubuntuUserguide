@@ -1,0 +1,10 @@
+###############################################################################
+#                        MTPuTTY hotkey setting								  #
+###############################################################################
+Tools -> Hot keys
+
+Next tab  ---> Ctrl + Down
+Previous tab ---> Ctrl + Up 
+Switch between the application and active puTTY window ---> Ctrl + O
+Duplicate Session ---> Ctrl + T
+

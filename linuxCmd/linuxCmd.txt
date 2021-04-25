@@ -21,3 +21,18 @@ else
 endif
 ###########################################
 
+3.watch
+... ...
+watch可以帮你监测一个命令的运行结果，来监测你想要的一切命令的结果变化
+
+watch -n 1 -d netstat -ant 【-n 设置间隔，-d,difference，高亮显示不同】
+
+watch -d 'ls /home/omd'       【-d 高亮显示】
+
+watch -t 'ls /home/omd'       【-t会关闭watch命令在顶部的时间间隔】
+
+说明：
+切换终端： Ctrl+x
+退出watch：Ctrl+g
+... ...
+
