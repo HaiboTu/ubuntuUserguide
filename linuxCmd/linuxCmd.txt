@@ -14,7 +14,7 @@ Codename:   xenial
 2.find . -path "./nginx" -prune -o -print
 
 ###########################################
-if -patch "./nginx"
+if -path "./nginx"
 	-prune
 else
 	-print
@@ -90,3 +90,5 @@ p∶列印，亦即将某个选择的资料印出。通常 p 会与参数 sed -n
 s∶取代，可以直接进行取代的工作哩！通常这个 s 的动作可以搭配正规表示法！例如 1,20s/old/new/g 就是啦！
 ... ...
 
+6.组合使用
+watch -n 1 awk '/processor\|cpu\ MHz/\{print\ $n\ $1\}' /proc/cpuinfo
