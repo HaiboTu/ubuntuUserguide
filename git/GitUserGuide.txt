@@ -39,3 +39,34 @@ $git tag -d v2.4
 3. Git clone
 #git clone指定分支
 $git clone -b branchA http://admin@192.168.1.101:7070/r/virtualbox_all_versions.git
+
+4. Git 自动补全
+a.查看git版本:
+$git version
+... ...
+git version 2.7.3
+... ...
+
+b.获取git-completion.bash脚本，注意将下方链接的版本号改为和git版本一致。
+$wget https://raw.githubusercontent.com/git/git/v2.7.4/contrib/completion/git-completion.bash
+... ...
+--2021-04-25 22:52:53--  https://raw.githubusercontent.com/git/git/v2.7.4/contrib/completion/git-completion.bash
+...
+2021-04-25 22:52:56 (656 KB/s) - ‘git-completion.bash’ saved [57390/57390]
+... ...
+
+c.将步骤2中内容粘贴至:
+$mv git-completion.bash ~/.git-completion.bash
+
+d.编辑~/.bashrc文件，添加一下内容:
+$vim ~/.bashrc
+... ...
+if [ -f ~/.git-completion.bash  ]; then
+    . ~/.git-completion.bash
+fi
+... ...
+
+e.更新环境变量:
+$source ~/.bashrc
+
+
