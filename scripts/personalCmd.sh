@@ -22,18 +22,18 @@ function update_tag {
                 SOURCE_DIR=$OPTARG;;
             h)
                 update_tag_usage
-                return -1;;
+                return 0;;
             \?)
                 echo "unrecognized option"
                 update_tag_usage
-                return -1;;
+                return 0;;
         esac
     done
 
     if [[ -z $SOURCE_DIR ]]; then
         echo "must specify source code directory"
         update_tag_usage
-        return -1;
+        return 0;
     fi
 
     if [[ ! -d $OUTPUT_DIR ]]; then
