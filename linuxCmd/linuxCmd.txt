@@ -64,6 +64,8 @@ OFS                输出域分隔符
 ORS                输出记录分隔符
 RS                 控制记录分隔符
 
+example:
+$awk -F ":" 'BEGIN{l=0}/cpu MHz/{l++;printf "%-16s\t",$2};/processor/{printf "%-4s: ",$2};l==8{l=0;printf "\n",l}' /proc/cpuinfo
 ... ...
 
 5.sed
@@ -92,3 +94,8 @@ s∶取代，可以直接进行取代的工作哩！通常这个 s 的动作可�
 
 6.组合使用
 watch -n 1 awk '/processor\|cpu\ MHz/\{print\ $n\ $1\}' /proc/cpuinfo
+
+7.sort
+sort按照列排序, -k指定列, -t指定分隔符
+$sort -n -t ' ' -k 1
+$ls -l | sort -n -t " " -k 5
