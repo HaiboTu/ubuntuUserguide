@@ -99,3 +99,30 @@ watch -n 1 awk '/processor\|cpu\ MHz/\{print\ $n\ $1\}' /proc/cpuinfo
 sort按照列排序, -k指定列, -t指定分隔符
 $sort -n -t ' ' -k 1
 $ls -l | sort -n -t " " -k 5
+
+
+8.dig
+dig查询DNS信息
+$dig www.baidu.com
+... ...
+; <<>> DiG 9.10.3-P4-Ubuntu <<>> www.baidu.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 54503
+;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4000
+;; QUESTION SECTION:
+;www.baidu.com.			IN	A
+
+;; ANSWER SECTION:
+www.baidu.com.		312	IN	CNAME	www.a.shifen.com.
+www.a.shifen.com.	388	IN	A	180.101.49.12
+www.a.shifen.com.	388	IN	A	180.101.49.11
+
+;; Query time: 5 msec
+;; SERVER: 127.0.1.1#53(127.0.1.1)
+;; WHEN: Thu May 06 11:03:27 +08 2021
+;; MSG SIZE  rcvd: 101
+... ...
