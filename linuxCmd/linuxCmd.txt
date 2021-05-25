@@ -100,7 +100,6 @@ sort按照列排序, -k指定列, -t指定分隔符
 $sort -n -t ' ' -k 1
 $ls -l | sort -n -t " " -k 5
 
-
 8.dig
 dig查询DNS信息
 $dig www.baidu.com
@@ -135,3 +134,14 @@ nohup 英文全称 no hang up（不挂起），用于在系统后台不挂断地
 文件不可写，输出重定向到$HOME/nohup.out 文件中。
 
 $nohup /test.sh &>/dev/null &
+
+10.开机关闭swap
+#vim /etc/fstab
+... ...
+#/dev/mapper/centos00-swap swap                    swap    defaults        0 0
+... ...
+
+11.源码树编译module
+$cd target_dir
+$make CONFIG_CRYPTO_DEV_SP_CCP=m -C /home/higon/hygonProject/kcapi/kernel-4.19  M=`pwd`  modules
+
