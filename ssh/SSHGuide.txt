@@ -60,3 +60,26 @@ IdentitiesOnly yes
 $ssh www 
 Now, you login the www.hi-linux.com server.
 ===============================================================================
+
+###############################################################################
+#					    配置心跳(避免长时间无响应断线)                        #
+# ssh sys config file: /etc/ssh/ssh_config                                    #
+###############################################################################
+
+Server 端
+$vim /etc/ssh/ssh_config
+... ...
+ClientAliveInterval 30
+ClientAiveCountMax 240
+... ...
+注: ClientAliveInterval 发送间隔(s)，ClientAliveCountMax最大次数
+
+
+Client 端
+$vim /etc/ssh/ssh_config
+... ...
+ServerAliveInterval 30
+ServerAiveCountMax 240
+... ...
+注: ServerAliveInterval 发送间隔(s)，ServerAiveCountMax最大次数
+
