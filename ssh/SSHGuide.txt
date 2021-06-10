@@ -67,14 +67,12 @@ Now, you login the www.hi-linux.com server.
 ###############################################################################
 
 Server 端
-$vim /etc/ssh/ssh_config
+$vim /etc/ssh/sshd_config
 ... ...
-ClientAliveInterval 30
-ClientAiveCountMax 240
+TCPKeepAlive yes
 ... ...
-注: ClientAliveInterval 发送间隔(s)，ClientAliveCountMax最大次数
 
-
+或
 Client 端
 $vim /etc/ssh/ssh_config
 ... ...
