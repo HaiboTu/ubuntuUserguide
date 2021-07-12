@@ -69,4 +69,6 @@ fi
 e.更新环境变量:
 $source ~/.bashrc
 
+5. git 查看修改文件
+$git log --name-status CommitID
 
