@@ -59,7 +59,7 @@ $sudo mkfs.vfat /dev/loopXp1
 $sudo mkfs.ext2 /dev/loopXp2
 
 #格式化Data分区为ext3格式
-$sudo mkfs.ext2 ${LOOP_DEV}p3
+$sudo mkfs.ext2 /dev/loopXp3
 
 4.挂载分区
 
@@ -73,7 +73,7 @@ $mkdir eFISystemMount
 $sudo mount /dev/loopXp1 ./eFISystemMount
 
 #创建System分区挂载目录
-$mkdir SystemMount
+$mkdir systemMount
 
 #挂载System分区
 $sudo mount /dev/loopXp2 ./systemMount
@@ -97,7 +97,7 @@ $sudo mkdir ./systemMount/grub
 
 #拷贝grub 启动配置
 #该指导以ubuntu 4.13.0-45-generic为例，默认UEFI文件为/boot/efi目录
-$sudo cp /boot/grub/ ./systemMount/grub
+$sudo cp /boot/grub/* ./systemMount/grub
 
 #拷贝bzImage/ramfs
 #bzImage 为编译kernel生成，路径:./linuxKernel/kernel/arch/x86/boot
