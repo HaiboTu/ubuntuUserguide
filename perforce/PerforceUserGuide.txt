@@ -1,0 +1,30 @@
+###############################################################################
+#                        Perforce Skill User Guide                            #
+###############################################################################
+1. set the env about perforce
+$setenv P4PORT perforceserver:1666
+$setenv P4USER userName
+$setenv P4EDITOR vim
+$setenv P4IGNORE $home/.p4ignore
+$setenv P4DIFF "git diff"
+
+$setenv P4CLIENT clientName
+
+Notes:
+1. The above command is based on csh.
+
+2. P4 ignore config
+$vim $home/.p4ignore
+...
+# Ignore .p4ignore files
+
+#Ignore object files, shared libraries, executable
+*.so
+*.d
+*.o
+*.log
+*.a
+*.moc
+*.exe
+...
+
