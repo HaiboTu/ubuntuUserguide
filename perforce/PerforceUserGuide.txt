@@ -28,3 +28,9 @@ $vim $home/.p4ignore
 *.exe
 ...
 
+3. p4 change changelist description
+$p4 change 229726
+... ...
+Description:
+	1.change SPOT magic space base to 0xFFFE_6800_0000 #edit it
+... ...
