@@ -149,7 +149,7 @@ $make CONFIG_CRYPTO_DEV_SP_CCP=m -C /home/higon/hygonProject/kcapi/kernel-4.19  
 copy	：Ctrl + Shift + C
 paste	：Ctrl + Shift + V
 
-12.注释shell
+13.注释shell
 $vim ./test.sh
 ... ...
 :<<'COMMENTBLOCK'
@@ -157,3 +157,19 @@ echo "This line will not echo." # commented-out code block
 COMMENTBLOCK
 ... ...
 备注：其中COMMENTBLOC中间部分属于注释部分
+
+14.sftp常用命令
+$sftp user@ip   #登录
+
+$pwd            #pwd是看远端服务器的目录， 即sftp服务器默认的当前目录.
+
+$pwdl           #lpwd是看linux本地目录.
+
+$ls             #ls是看sftp服务器下当前目录下的东东.
+
+$lls            #lls是看linux当前目录下的东东.
+
+$put a.txt      #这个是把linux当前目录下的a.txt文件上传到sftp服务器的当前目录下
+
+$get b.txt      #这个是把sftp服务器当前目录下的b.txt文件下载到linux当前目录下.
+
