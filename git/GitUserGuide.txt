@@ -91,3 +91,14 @@ f.hotfix-xxx（紧急bug修改分支，项目上线之后可以会遇到一些�
 开发过程中，如果组员A开发的功能依赖组员B正在开发的功能，可以待组员B开发好相关功能之后，组员A直接pull组员B的分支下来开发，不需要先将组员B的分支merge 到develop分支。
 feature 分支在申请合并之前，最好是先 pull 一下 develop主分支下来，看一下有没有冲突，如果有就先解决冲突后再申请合并。
 
+7. git bisect 二分查找定位分析
+a.设定正确提交patch和发现bug patch，开始二分查找定位
+$git bisect start [start commit id] [end commit id]
+b.根据git bisect结果，进行测试，并通过git bisect good/bad进行标记
+$git bisect good/bad
+...
+b47892 is the first bad commit
+...
+c.定位出错提交，分析原因，并恢复debug之前提交，分析结束
+$git bisect reset
+
