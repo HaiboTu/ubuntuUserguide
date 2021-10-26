@@ -69,9 +69,18 @@ http://mirrors.aliyun.com/repo/
 
 通过wget http://mirrors.aliyun.com/repo/Centos-6.repo命令下载与系统版本对应的仓库配置文件，
 并替换原来的CentOS-Base.repo文件。
-$wget http://mirrors.aliyun.com/repo/Centos-6.repo
+$cd /etc/yum.repos.d
+$wget http://mirrors.aliyun.com/repo/Centos-7.repo
+
+修改Centos-Base.repo http为https
+#vim /etc/yum.repos.d/CentOS-Base.repo
+... ...
+	baseurl=https://mirrors.aliyun.com/centos/$releasever/extras/$basearch/
+			https://mirrors.aliyuncs.com/centos/$releasever/extras/$basearch/
+			https://mirrors.cloud.aliyuncs.com/centos/$releasever/extras/$basearch/
+... ...
 $mv CentOS-Base.repo CentOS-Base.repo.bak
-$mv Centos-6.repo CentOS-Base.repo
+$mv Centos-7.repo CentOS-Base.repo
 
 4.常用的YUM命令
 
