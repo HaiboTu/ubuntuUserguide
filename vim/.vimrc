@@ -186,3 +186,5 @@ let g:go_version_warning = 0
 
 " disable godef split feature
 let g:godef_split = 0
+
+set colorcolumn=81
