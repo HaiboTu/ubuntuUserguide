@@ -210,3 +210,40 @@ echo -e “\033[47;30m 白底黑字 \033[0m”
 
 16.$?
 shell脚本可以通过$?判断命令执行结果，0表示成功，非0表示失败
+
+17.pushd、popd和dirs
+
+dirs命令：查看现在目录栈元素
+root@VM-0-2-ubuntu:/home# dirs
+/home /
+
+目录栈的概念：
+存放一个或多个目录，栈中至少要有一个元素。
+栈顶元素永远是当前目录：使用cd命令切换目录会改变目录栈的栈顶元素，用pushd或popd改变栈顶元素会切换目录。
+
+root@VM-0-2-ubuntu:~# dirs
+~
+root@VM-0-2-ubuntu:~# cd /
+root@VM-0-2-ubuntu:/# dirs
+  /
+
+popd命令：将栈顶元素删除,同时会改变当前目录（因为改变了栈顶元素），且会列出改变后的目录栈内容。
+root@VM-0-2-ubuntu:/etc# popd
+/home /
+root@VM-0-2-ubuntu:/home# popd
+/
+root@VM-0-2-ubuntu:/# popd
+-su: popd: directory stack empty
+
+加参数的：
+# 注意下面的N是数字，n是字母n参数
+popd +N  # 删除栈中（从左边数）第N个元素，由0开始计。
+popd -N  # 删除栈中（从右边数）第N个元素，由0开始计。
+pop -n # 不改变当前目录（也就是不改变栈顶元素，操作除了栈顶外栈内其他元素）
+
+# usage: pushd [-n] [+N | -N | dir]  
+pushd  # 不加参数时，交换栈顶前两个元素
+pushd +N  # 将栈内元素循环左移，直到将（从左边数）第N个元素移动到栈顶，由0开始计。
+pushd -N  # 将栈内元素循环左移，直到将（从右边数）第N个元素移动到栈顶，由0开始计。
+pushd -n dir # 将目录入栈，但不改变当前元素，即将目录插入栈中作为第二个元素。 注意-n参数要在目录之前kkkkkk
+
