@@ -102,3 +102,8 @@ b47892 is the first bad commit
 c.定位出错提交，分析原因，并恢复debug之前提交，分析结束
 $git bisect reset
 
+8. 配置git push 默认远程分支gerrit要求分之(refs/for/master)
+$git config remote.origin.push HEAD:refs/for/master
+$git push origin #默认将本地HEAD指向代码patch推送至gerrit review.
+
+
