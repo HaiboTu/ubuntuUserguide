@@ -106,4 +106,6 @@ $git bisect reset
 $git config remote.origin.push HEAD:refs/for/master
 $git push origin #默认将本地HEAD指向代码patch推送至gerrit review.
 
+9. 查看修改文件列表
+$git log -u --name-only
 
