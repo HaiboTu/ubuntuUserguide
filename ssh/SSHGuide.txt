@@ -59,6 +59,10 @@ IdentitiesOnly yes
 ... ...
 $ssh www 
 Now, you login the www.hi-linux.com server.
+
+如果提示"Bad owner or permissions on /home/higon/.ssh/config",则需要修改.config
+文件权限至600
+$chmod 600 config
 ===============================================================================
 
 ###############################################################################
