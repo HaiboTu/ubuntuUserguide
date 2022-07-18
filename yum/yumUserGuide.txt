@@ -70,10 +70,10 @@ http://mirrors.aliyun.com/repo/
 通过wget http://mirrors.aliyun.com/repo/Centos-6.repo命令下载与系统版本对应的仓库配置文件，
 并替换原来的CentOS-Base.repo文件。
 $cd /etc/yum.repos.d
-$wget http://mirrors.aliyun.com/repo/Centos-7.repo
+$wget http://mirrors.aliyun.com/repo/Centos-altarch-7.repo?spm=a2c6h.25603864.0.0.3d975969p46h1D
 
 修改Centos-Base.repo http为https
-#vim /etc/yum.repos.d/CentOS-Base.repo
+#vim /etc/yum.repos.d/Centos-altarch-7.repo?spm=a2c6h.25603864.0.0.3d975969p46h1D
 ... ...
 	baseurl=https://mirrors.aliyun.com/centos/$releasever/extras/$basearch/
 			https://mirrors.aliyuncs.com/centos/$releasever/extras/$basearch/
