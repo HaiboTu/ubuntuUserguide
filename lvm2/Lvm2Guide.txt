@@ -2,6 +2,11 @@
 #                                 LVM2使用指导                                #
 ###############################################################################
 
+LVM就是将一些零碎的磁盘分区（PV）合并成一个较大的磁盘（VG），然后在根据需要对
+这个较大的磁盘（VG）进行划分成不同的大小分区（LV），这些小的分区（LV）是可以动
+态的扩展和缩小的，这就是LVM的逻辑卷管理过程。
+
+
 1. 基本知识
 fs（file system文件系统）
 
@@ -108,4 +113,262 @@ Block device           253:0
 
 7. 如果提示未激活，则激活逻辑卷
 #vgchange -ay /dev/centos/home
+
+8. 创建分区(该操作会修改磁盘分区，慎！！！)
+[root@xuegod120 ~]# fdisk /dev/sdb
+Welcome to fdisk (util-linux 2.23.2).
+
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table
+Building a new DOS disklabel with disk identifier 0xfa4d8bc3.
+Command (m for help): n            #创建分区
+Partition type:
+                      p   primary (1 primary, 0 extended, 3 free)
+                      e   extended
+Select (default p): p            #创建主分区
+Partition number (2-4, default 2): 2 #对应分区的序号，默认从1开始
+First sector (8390656-41943039, default 8390656): #默认回车，从当前扇区开始
+Using default value 8390656 Last sector, +sectors or +size{K,M,G} (8390656-41943039, default 41943039): +4G #自定制分区大小
+Partition 2 of type Linux and of size 4 GiB is set Command (m for help): w #W保存当前创建的分区
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+[root@xuegod120 ~]# lsblk  #可以看到创建3个分区完成
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda               8:0    0   20G  0 disk
+├─sda1            8:1    0    1G  0 part /boot
+└─sda2            8:2    0   19G  0 part
+├─centos-root 253:0    0   17G  0 lvm  /
+└─centos-swap 253:1    0    2G  0 lvm  [SWAP]
+sdb               8:16   0   20G  0 disk
+├─sdb1            8:17   0    4G  0 part
+├─sdb2            8:18   0    4G  0 part
+└─sdb3            8:19   0    4G  0 part
+sr0              11:0    1 1024M  0 rom
+
+9. 创建pv
+[root@xuegod120 ~]# pvcreate /dev/sdb1
+Physical volume "/dev/sdb1" successfully created.
+
+[root@xuegod120 ~]# pvs
+PV         VG     Fmt  Attr PSize   PFree
+/dev/sda2  centos lvm2 a--  <19.00g    0
+/dev/sdb1         lvm2 ---    4.00g 4.00g
+
+[root@xuegod120 ~]# pvdisplay #默认显示所有pv，可以加上pv的名字，例如/dev/sdb1
+--- Physical volume ---
+    PV Name               /dev/sda2
+    VG Name               centos
+    PV Size               <19.00 GiB / not usable 3.00 MiB
+    Allocatable           yes (but full)
+    PE Size               4.00 MiB
+    Total PE              4863
+    Free PE               0
+    Allocated PE          4863
+    PV UUID               GFYA5I-5OD8-e1pe-vF1P-3UOp-YfZc-1g3D4f
+
+    "/dev/sdb1" is a new physical volume of "4.00 GiB"
+    --- NEW Physical volume ---
+    PV Name               /dev/sdb1
+    VG Name
+    PV Size               4.00 GiB
+    Allocatable           NO
+    PE Size               0
+    Total PE              0
+    Free PE               0
+    Allocated PE          0
+    PV UUID
+    ddjAqN-Hd70-RcMk-n5Id-KX2L-YYBd-QqKFHH
+
+[root@xuegod120 ~]# pvremove /dev/sdb1 #移除pv
+Labels on physical volume "/dev/sdb1" successfully wiped.
+
+10.创建vg
+[root@xuegod120 ~]# vgcreate vg01 /dev/sdb1
+Physical volume "/dev/sdb1" successfully created.
+Volume group "vg01" successfully created
+
+[root@xuegod120 ~]# vgs vg01
+VG   #PV #LV #SN Attr   VSize  VFree
+vg01   1   0   0 wz--n- <4.00g <4.00g
+
+[root@xuegod120 ~]# vgdisplay vg01
+--- Volume group ---
+VG Name               vg01
+System ID
+Format                lvm2
+Metadata Areas        1
+Metadata Sequence No  1
+VG Access             read/write
+VG Status             resizable
+MAX LV                0
+Cur LV                0
+Open LV               0
+Max PV                0
+Cur PV                1
+Act PV                1
+VG Size               <4.00 GiB
+PE Size               4.00 MiB #可以看到默认PE大小为4M
+Total PE              1023
+Alloc PE / Size       0 / 0
+Free  PE / Size       1023 / <4.00 GiB
+VG UUID               rqy9ug-XM3g-Gx5l-vsI5-w2kO-nveY-JiPDaA
+
+11.扩容vg
+[root@xuegod120 ~]# pvs
+PV         VG     Fmt  Attr PSize   PFree
+/dev/sda2  centos lvm2 a--  <19.00g     0
+/dev/sdb1  vg01   lvm2 a--   <4.00g <4.00g
+
+[root@xuegod120 ~]# pvcreate /dev/sdb2 #vg扩容是在pv的基础上，所以先创建pv
+Physical volume "/dev/sdb2" successfully created.
+
+[root@xuegod120 ~]# pvs
+PV         VG     Fmt  Attr PSize   PFree
+/dev/sda2  centos lvm2 a--  <19.00g     0
+/dev/sdb1  vg01   lvm2 a--   <4.00g <4.00g
+/dev/sdb2         lvm2 ---    4.00g  4.00g
+
+[root@xuegod120 ~]# vgextend vg01 /dev/sdb2        #扩容vg01
+Volume group "vg01" successfully extended
+
+[root@xuegod120 ~]# vgdisplay vg01
+--- Volume group ---
+VG Name               vg01
+System ID
+Format                lvm2
+Metadata Areas        2
+Metadata Sequence No  2
+VG Access             read/write
+VG Status             resizable
+MAX LV                0
+Cur LV                0
+Open LV               0
+Max PV                0
+Cur PV                2
+Act PV                2
+VG Size               7.99 GiB    扩容到8G
+PE Size               4.00 MiB
+Total PE              2046
+Alloc PE / Size       0 / 0
+Free  PE / Size       2046 / 7.99 GiB
+VG UUID i             rqy9ug-XM3g-Gx5l-vsI5-w2kO-nveY-JiPDaA
+
+12.缩小vg
+
+注意：缩小vg属于风险操作，缩小前需要确认缩小的pv内没有数据，或已备份
+[root@xuegod120 ~]# vgreduce vg01 /dev/sdb2
+Removed "/dev/sdb2" from volume group "vg01"
+
+[root@xuegod120 ~]# vgdisplay vg01
+--- Volume group ---
+VG Name               vg01
+System ID
+Format                lvm2
+Metadata Areas        1
+Metadata Sequence No  3
+VG Access             read/write
+VG Status             resizable
+MAX LV                0
+Cur LV                0
+Open LV               0
+Max PV                0
+Cur PV                1
+Act PV                1
+VG Size               <4.00 GiB #vg大小变回4G
+PE Size               4.00 MiB
+Total PE              1023
+Alloc PE / Size       0 / 0
+Free  PE / Size       1023 / <4.00 GiB
+VG UUID               rqy9ug-XM3g-Gx5l-vsI5-w2kO-nveY-JiPDaA
+
+13.创建lv
+语法：lvcreate -L #[mMgGtT] -n NAME Vg
+-L：指定大小；两种写法，+ NUM表示增加多大的lv；NUM表示创建后的lv大小；
+-n：lv的名称
+
+[root@xuegod120 ~]# lvcreate -L 2G -n lv01 vg01
+Logical volume "lv01" created.
+
+[root@xuegod120 ~]# lvs
+LV   VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+root centos -wi-ao---- <17.00g
+swap centos -wi-ao----   2.00g
+lv01 vg01   -wi-a-----   2.00g
+
+[root@xuegod120 ~]# lvdisplay /dev/vg01/lv01 #这里不能使用lv的名称，需要加上路径
+--- Logical volume ---
+LV Path                /dev/vg01/lv01
+LV Name                lv01
+VG Name                vg01
+LV UUID                f4PrKj-dKMr-XDPP-3iYA-0fUN-dy7F-gAsNcy
+LV Write Access        read/write
+LV Creation host, time xuegod120.com, 2020-06-01 11:37:46 +0800
+LV Status              available
+# open                 0
+LV Size                2.00 GiB
+Current LE             512
+Segments               1
+Allocation             inherit
+Read ahead sectors     auto
+- currently set to     8192
+Block device           253:2
+
+14.扩容lv（无法跨vg扩容）
+[root@xuegod120 ~]# lvextend -L +1G /dev/vg01/lv01
+Size of logical volume vg01/lv01 changed from 2.00 GiB (512 extents) to 3.00
+GiB (768 extents).
+Logical volume vg01/lv01 successfully resized.
+
+15.缩小lv
+[root@xuegod120 ~]# lvreduce -L -2G /dev/vg01/lv01
+WARNING: Reducing active logical volume to 3.00 GiB.
+THIS MAY DESTROY YOUR DATA (filesystem etc.)
+Do you really want to reduce vg01/lv01? [y/n]: y
+Size of logical volume vg01/lv01 changed from 5.00 GiB (1280 extents) to
+3.00 GiB (768 extents).
+Logical volume vg01/lv01 successfully resized.
+
+[root@xuegod120 ~]# lvs
+LV   VG     Attr       LSize   Pool Origin Data%  Meta%  Move Log
+Cpy%Sync Convert
+root centos -wi-ao---- <17.00g
+swap centos -wi-ao----   2.00g
+lv01 vg01   -wi-a-----   3.00g
+
+16.挂载lv逻辑卷
+[root@xuegod120 ~]# mkdir /back
+[root@xuegod120 ~]# mkfs.xfs /dev/vg01/lv01  #格式化lv
+meta-data=/dev/vg01/lv01  isize=512 agcount=4, agsize=196608 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0, sparse=0
+data     =                       bsize=4096   blocks=786432, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096 blocks=2560, version=2
+         =                       sectsz=512 sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096 blocks=0, rtextents=0
+
+[root@xuegod120 ~]# mount  /dev/vg01/lv01
+/back/
+
+[root@xuegod120 ~]# lsblk
+NAME            MAJ:MIN RM  SIZE RO TYPE
+MOUNTPOINT
+sda               8:0    0   20G  0 disk
+├─sda1            8:1    0    1G  0 part /boot
+└─sda2            8:2    0   19G  0 part
+├─centos-root 253:0    0   17G  0 lvm  /
+└─centos-swap 253:1    0    2G  0 lvm [SWAP]
+sdb               8:16   0   20G  0 disk
+├─sdb1            8:17   0    4G  0 part
+│ └─vg01-lv01   253:2    0    3G  0 lvm /back   #已挂在到/back目录
+├─sdb2            8:18   0    4G  0 part
+└─sdb3            8:19   0    4G  0 part
+sr0              11:0    1 1024M  0 rom
+
 
