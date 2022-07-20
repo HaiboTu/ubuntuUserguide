@@ -255,4 +255,7 @@ $ps -Lf pid #显示进程和所有子线程信息
 
 $make CONFIG_KVM_AMD=m -C /home/hygon/hygon-project/hygon-siv-work/linux-sev-es-5.9-v1-siv/ M=/home/hygon/hygon-project/hygon-siv-work/linux-sev-es-5.9-v1-siv/arch/x86/kvm/ modules
 
+20. rpm
+#rpm -qa #查询安装包
+#rpm -e --nodeps kernel-4.19.91_csv_00406_g6422c9a-2.x86_64 #卸载安装包
 
