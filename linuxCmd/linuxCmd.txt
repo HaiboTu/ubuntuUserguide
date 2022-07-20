@@ -250,3 +250,9 @@ pushd -n dir # 将目录入栈，但不改变当前元素，即将目录插入�
 18. ps
 $ps -Lf pid #显示进程和所有子线程信息
 
+19. Make modules
+# 在Linux kernel源码可以在不编译完整内核条件下，单独编译某个module，以达到快速修改、编译和调试目的。
+
+$make CONFIG_KVM_AMD=m -C /home/hygon/hygon-project/hygon-siv-work/linux-sev-es-5.9-v1-siv/ M=/home/hygon/hygon-project/hygon-siv-work/linux-sev-es-5.9-v1-siv/arch/x86/kvm/ modules
+
+
