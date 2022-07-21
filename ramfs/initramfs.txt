@@ -1,0 +1,19 @@
+
+1．boot loader把内核以及initrd文件加载到内存的特定位置。
+2．内核判断initrd的文件格式，如果不是cpio格式，将其作为image-initrd处理。
+3．内核将initrd的内容保存在rootfs下的/initrd.image文件中。#image-initrd
+4．内核将/initrd.image的内容读入/dev/ram0设备中，也就是读入了一个内存盘中。
+5．接着内核以可读写的方式把/dev/ram0设备挂载为原始的根文件系统。
+6．如果/dev/ram0被指定为真正的根文件系统，那么内核跳至最后一步正常启动。
+
+7．执行initrd上的/linuxrc文件，linuxrc通常是一个脚本文件，负责加载内核访问根文件系统必须的驱动，
+以及加载根文件系统。
+8．/linuxrc执行完毕，常规根文件系统被挂载
+
+9．如果常规根文件系统存在/initrd目录，那么/dev/ram0将从/移动到/initrd。否则如果/initrd目录不存在，
+/dev/ram0将被卸载。
+10． 在常规根文件系统上进行正常启动过程 ，执行/sbin/init。
+
+
+
+

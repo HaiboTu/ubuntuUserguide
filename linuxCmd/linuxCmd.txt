@@ -259,3 +259,11 @@ $make CONFIG_KVM_AMD=m -C /home/hygon/hygon-project/hygon-siv-work/linux-sev-es-
 #rpm -qa #查询安装包
 #rpm -e --nodeps kernel-4.19.91_csv_00406_g6422c9a-2.x86_64 #卸载安装包
 
+21. 判断空文件夹
+TARGET_DIRECTORY='/home/hygon/hygon-project/hygon-siv-work/linux-sev-es-5.9-v1-siv'
+MOUNT_DIRECTORY='/home/hygon/hygon-project/linux-sev-es-5.9-v1-siv'
+
+if [ ! "$(ls -A $TARGET_DIRECTORY)" ]; then
+    sudo mount --bind $MOUNT_DIRECTORY $TARGET_DIRECTORY
+fi
+
