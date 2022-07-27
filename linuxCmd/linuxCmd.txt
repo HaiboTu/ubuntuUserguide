@@ -267,3 +267,5 @@ if [ ! "$(ls -A $TARGET_DIRECTORY)" ]; then
     sudo mount --bind $MOUNT_DIRECTORY $TARGET_DIRECTORY
 fi
 
+22. find
+$find -user xxx #查找用户为xxx的文件
