@@ -1,0 +1,81 @@
+###############################################################################
+#                       journalctlGuide 指南                                  #
+###############################################################################
+
+systemd是大多数主要Linux发行版中的默认设置。systemd的主要功能之一是它收集日志的
+方式以及为分析这些日志提供的工具。
+
+journald是systemd的守护程序，该守护程序从各种日志源（例如syslog）收集日志。
+
+journalctl是使您可以与日记日志进行交互的命令行工具。
+
+使用journalctl，您可以读取日志，实时监视日志，根据时间，服务，
+严重性和其他参数过滤日志。
+
+某些Linux发行版，特别是台式机发行版，默认情况下不启用日记日志。
+
+日志的默认位置是/var/log/journal目录。您应该确保该目录存在。如果没有，请自行
+创建。在/etc/systemd/journald.conf文件中，确保将值Storage设置为auto或persistent。
+
+1. journalctl
+#journalctl
+-- Logs begin at 三 2022-08-03 11:08:47 CST, end at 三 2022-08-03 15:13:17 CST.
+--
+8月 03 11:08:47 centos-7 systemd-journal[1171]: Runtime journal is using 8.0M (max allowed 4.0G, trying to leave 4.0G free of 62.8G available → current limit  4.0G).
+8月 03 11:08:47 centos-7 kernel: Linux version 5.16.20-zp-sev-es-siv (hygon@centos-7) (gcc (GCC) 9.1.0, GNU ld (GNU Binutils) 2.38) #18 SMP PREEMPT Wed Aug 3 09:55:37 CST 2022
+8月 03 11:08:47 centos-7 kernel: Command line: BOOT_IMAGE=/vmlinuz-5.16.20-zp-sev-es-siv root=/dev/mapper/centos-root ro crashkernel=auto rd.lvm.lv=centos/root siv_mem=4G rd.lvm.lv=centos/swap rhgb quiet 
+... ...
+
+2. 以相反的顺序显示日记日志
+#journalctl -r
+
+3. 显示最新25行
+#journalctl -n 25
+
+4. 实时显示日志
+#journalctl -f
+
+5. 查看Linux内核日志，则可以使用选项-k
+#journalctl -k
+
+6. 查看特定引导会话
+#journalctl --list-boots
+... ...
+-3 af7df7b083994e8e851b57df1b6dfce5 三 2022-08-03 11:59:23 CST—三 2022-08-03 12:06:56 CST
+-2 417b9944d4554863841bc78c76e45bcf 三 2022-08-03 12:09:46 CST—三 2022-08-03 14:06:52 CST
+-1 12ea5ad0b31640529c9c0706341a16b5 三 2022-08-03 14:08:20 CST—三 2022-08-03 14:19:41 CST
+ 0 728acc40f64d47ffad5767e7a6c10f43 三 2022-08-03 14:25:08 CST—三 2022-08-03 15:18:48 CST
+
+7. 引导会话0是当前的引导会话。引导会话-1是最后引导的会话，依此类推。
+#journalctl -b 0
+
+8. 查看特定服务日志
+#journalctl -u service_name
+
+9. 过滤特定日期日志
+#journalctl --since "2020-07-10"
+
+10. 还可以根据用户ID（UID），组ID（GID）和进程ID（PID）过滤日记日志
+#journalctl _PID=1234
+
+11. 仅显示带有journalctl的日志中的错误
+#journalctl -p 3 -xb
+
+-p 3：过滤优先级3的日志（这是错误的）
+-x：  在日志上提供其他信息（如果有）
+b：   自上次引导以来（当前会话)
+
+优先码
+0   能源
+1   警报
+2   暴击
+3   呃
+4   警告
+5   注意
+6   信息
+7   调试
+
+12. 查看日志占用磁盘空间
+#journalctl --disk-usage
+
+
