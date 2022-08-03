@@ -273,3 +273,16 @@ $find -user xxx #查找用户为xxx的文件
 23. id
 $id hygon #查看用户名为hygon的uid/gid/groups
 
+24.minicom
+$sudo minicom -D /dev/ttyUSBx -C xxx #minicom 登录串口
+
+25.linux 设置代理
+export HTTP_PROXY=http://172.28.21.7:7890/
+export HTTPS_PROXY=http://172.28.21.7:7890/
+export https_proxy=http://172.28.21.7:7890/
+export all_proxy=socks://172.28.21.7:7891/
+export ALL_PROXY=socks://172.28.21.7:7891/
+export FTP_PROXY=http://172.28.21.7:7890/
+export ftp_proxy=http://172.28.21.7:7890/
+export http_proxy=http://172.28.21.7:7890/
+

@@ -73,6 +73,11 @@ mount -t sysfs none /sys
 # mdev是busybox自带的一个udev，用于系统启动和热插拔或动态加载驱动程序时，
 # 自动产生设备节点，这句话如果不加上则需要手动mknod来挂载设备节点
 /sbin/mdev -s
+
+# 把/sbin/mdev写入/proc/sys/kernel/hotplug文件中
+# 当有热插拔事件产生时，内核会调用/proc/sys/kernel/hotplug文件里面指定的应用程
+# 序来处理热插拔事件
+echo /sbin/mdev > /proc/sys/kernel/hotplug 
 ... ...
 
 $chmod +x ./etc/init.d/rcS  
