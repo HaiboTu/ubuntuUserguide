@@ -286,3 +286,20 @@ export FTP_PROXY=http://172.28.21.7:7890/
 export ftp_proxy=http://172.28.21.7:7890/
 export http_proxy=http://172.28.21.7:7890/
 
+25.linux源码安装软件
+源码的安装一般由有这三个步骤：配置(configure)、编译(make)、安装(make install)。
+
+配置:
+$./configure --prefix=/usr/local # --prefix用于配置安装的路径，如果不配置默认放在/usr/local/bin，
+                                 # 库文件默认放在/usr/local/lib，配置文件默认放在/usr/local/etc，
+                                 # 其它的资源文件放在/usr/local/share.
+
+编译：
+$make
+
+安装：
+#make install
+
+卸载：
+#make uninstall
+
