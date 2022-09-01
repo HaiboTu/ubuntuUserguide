@@ -84,3 +84,35 @@ $ sudo qemu-nbd -d /dev/nbd0p1
 12.Qemu boot ubuntu iso
 $sudo qemu-system-x86_64 -hda ubuntu-amd64-1-vcpu.raw --cdrom ubuntu-16.04.5-desktop-amd64.iso --enable-kvm -m 2048M
 
+13.libguestfs挂载qcow2镜像文件
+#在基于 Debian 的系统上：
+$ sudo apt-get install libguestfs-tools
+
+#在基于 Red Hat 的系统上：
+$ sudo yum install libguestfs-tools
+
+#我们可以像下面这样挂载一个 qcow2 格式的磁盘镜像：
+$ sudo guestmount -a /path/to/qcow2/image -m /path/to/mount/point
+
+#"-m " 用于指定磁盘镜像内，你想要挂载的分区(比如，/dev/sda1)。
+
+#如果你不确定磁盘镜像内有什么分区，你可以任意提供一个无效的设备名。guestmount
+#工具将为你展示所有你可以选择的设备名字。如：
+$ sudo guestmount -a sdcard.img.qcow2 -m /dev/sdaqw qcow2_mount_point
+
+libguestfs: error: mount_options: mount_options_stub: /dev/sdaqw: No such file
+or directory
+guestmount: '/dev/sdaqw' could not be mounted.
+guestmount: Did you mean to mount one of these filesystems?
+guestmount: /dev/sda (vfat)
+
+#挂载磁盘镜像 userdata-qemu.img.qcow2 内的/dev/sda(vfat)
+$sudo guestmount -a userdata-qemu.img.qcow2 -m /dev/sda qcow2_mount_point
+
+#以 "read-only" 模式挂载:
+$sudo guestmount -a userdata-qemu.img.qcow2 -m /dev/sda --ro
+qcow2_mount_point
+
+#卸载
+$ sudo guestunmount qcow2_mount_point
+

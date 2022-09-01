@@ -114,3 +114,11 @@ $git add -p
 
 git 会自动将改动切分成多个片段，并展示第一个片段，提示你进行选择。
 
+o--->commit A --->commit B --->commit C
+
+#如果是中间的某个提交，当前处于commit C，需要拆分Commit B
+至两个提交，可以先通过$git rebase -i A，然后选择edit编辑，进行拆分之后,
+提交，然后$git rebase --continue 即可。
+
+
+
