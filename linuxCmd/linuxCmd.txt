@@ -303,3 +303,7 @@ $make
 卸载：
 #make uninstall
 
+26.设置系统时间
+适合CENTOS系统
+#timedatectl set-ntp no
+#timedatectl set-time "2023-07-03 10:50:11"

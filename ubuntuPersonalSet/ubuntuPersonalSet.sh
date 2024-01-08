@@ -39,7 +39,7 @@ function cpConfigFile()
 function gitConfig()
 {
     git config --global color.ui true
-    git config --global user.email "tuhaibo511@126.com"
+    git config --global user.email "tuhaibo@hygon.cn"
     git config --global user.name "Haibo Tu"
     git config --global core.editor vim
     git config --global commit.template ~/.gitmsg
@@ -59,7 +59,7 @@ function installVimPlug()
     vim +BundleInstall +qall
 }
 
-installSoftware
+#installSoftware
 gitConfig
 cpConfigFile
 installVimPlug

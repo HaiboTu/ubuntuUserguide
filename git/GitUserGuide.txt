@@ -24,6 +24,9 @@ $git tag -a v2.3 -m "version 2.3(merge npt patches) released for ant financial s
 #push tag to server
 $git push origin v2.3
 
+#push tag to the special branch on the remote server
+$git push origin rc-20230512-v1.0.2 HEAD:refs/heads/hct-1.0.1
+
 #delete the tag on the server
 $git push origin --delete tag <tagname>
 
